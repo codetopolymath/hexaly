@@ -28,6 +28,10 @@ h1 {
     margin-bottom: 25px;
     color: #2c3e50;
     font-weight: 600;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 h2 {
@@ -49,6 +53,7 @@ h3 {
     display: flex;
     margin-bottom: 25px;
     border-bottom: 1px solid #ddd;
+    flex-wrap: wrap;
 }
 
 .tab-btn {
@@ -131,6 +136,7 @@ textarea[readonly] {
 .radio-group {
     display: flex;
     gap: 20px;
+    flex-wrap: wrap;
 }
 
 .radio-group input[type="radio"] {
@@ -208,12 +214,133 @@ textarea[readonly] {
     margin-right: 8px;
 }
 
+/* Segment info */
+.segment-info {
+    margin-top: 20px;
+    display: none;
+}
+
+.segment-progress {
+    height: 10px;
+    background-color: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.segment-bar {
+    height: 100%;
+    background-color: #3498db;
+    transition: width 0.3s ease;
+}
+
+.segment-progress.multi {
+    display: flex;
+    gap: 2px;
+    height: 20px;
+}
+
+.segment-part {
+    flex: 1;
+    position: relative;
+    background-color: #eee;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.segment-part-bar {
+    height: 100%;
+    background-color: #3498db;
+    transition: width 0.3s ease;
+}
+
+.segment-part-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 10px;
+    color: #333;
+    font-weight: bold;
+}
+
+.segment-details {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+}
+
+/* Highlight invalid characters for GSM-7 */
+.has-invalid-chars {
+    border-color: #e74c3c !important;
+    background-color: rgba(231, 76, 60, 0.05);
+}
+
+/* Examples section */
+.examples {
+    margin-top: 15px;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
+
+.example-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+}
+
+.example-btn {
+    padding: 8px 12px;
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.example-btn:hover {
+    background-color: #e9e9e9;
+    border-color: #ccc;
+}
+
 /* Footer */
 footer {
     margin-top: 30px;
     text-align: center;
     color: #777;
     font-size: 14px;
+}
+
+/* Technical details */
+.technical-details {
+    margin-top: 20px;
+    border-top: 1px dashed #ddd;
+    padding-top: 15px;
+}
+
+.technical-details summary {
+    cursor: pointer;
+    color: #666;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.technical-details pre {
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-family: monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #333;
+}
+
+/* Debug mode styles */
+.debug-mode .container {
+    border: 2px solid #3498db;
 }
 
 /* Responsive adjustments */
@@ -230,5 +357,10 @@ footer {
     
     .container {
         padding: 20px 15px;
+    }
+    
+    .tab-btn {
+        padding: 10px 15px;
+        font-size: 14px;
     }
 }

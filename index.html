@@ -55,6 +55,14 @@
                         <span>Encoding:</span>
                         <span id="encoding-type">GSM-7 bit packed</span>
                     </div>
+                    <div class="detail-item">
+                        <span>Segments:</span>
+                        <span id="segment-count">1</span>
+                    </div>
+                </div>
+                
+                <div id="segment-info" class="segment-info">
+                    <!-- Segment information will appear here -->
                 </div>
             </div>
         </div>
@@ -93,9 +101,24 @@
         <p>SMS Encoding Tool - For SMS industry use with GSM-7 bit packed and UTF-16 encoding</p>
     </footer>
 
-    <!-- Load the JavaScript files -->
-    <script src="gsm7.js"></script>
-    <script src="utf16.js"></script>
-    <script src="main.js"></script>
+    <!-- Load JavaScript files in proper order -->
+    <script src="js/config.js"></script>
+    <script src="js/utils/helpers.js"></script>
+    
+    <!-- Core Engine -->
+    <script src="js/core/encoder.js"></script>
+    
+    <!-- Services -->
+    <script src="js/services/gsm7.service.js"></script>
+    <script src="js/services/utf16.service.js"></script>
+    <script src="js/services/api.service.js"></script>
+    
+    <!-- UI Components -->
+    <script src="js/ui/tabs.js"></script>
+    <script src="js/ui/forms.js"></script>
+    <script src="js/ui/debugger.js"></script>
+    
+    <!-- Main App -->
+    <script src="js/app.js"></script>
 </body>
 </html>
