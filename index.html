@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMS Encoding Tool</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>SMS Encoding Tool</h1>
+        
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="encode">Encode Text to Hex</button>
+            <button class="tab-btn" data-tab="decode">Decode Hex to Text</button>
+        </div>
+        
+        <div class="tab-content active" id="encode">
+            <h2>Encode Text to Hex</h2>
+            <div class="form-group">
+                <label for="text-input">Enter Text:</label>
+                <textarea id="text-input" placeholder="Enter your text here..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Encoding Type:</label>
+                <div class="radio-group">
+                    <input type="radio" id="gsm7" name="encode-type" value="gsm7" checked>
+                    <label for="gsm7">GSM-7 (Latin/English)</label>
+                    
+                    <input type="radio" id="utf16" name="encode-type" value="utf16">
+                    <label for="utf16">UTF-16 (Unicode/Hindi)</label>
+                </div>
+            </div>
+            
+            <button id="encode-btn" class="action-btn">Encode</button>
+            
+            <div class="result-group">
+                <div class="result">
+                    <h3>Result:</h3>
+                    <textarea id="hex-output" readonly placeholder="Hex result will appear here..."></textarea>
+                    <button id="copy-hex" class="copy-btn">Copy</button>
+                </div>
+                
+                <div class="details">
+                    <div class="detail-item">
+                        <span>Character Count:</span>
+                        <span id="char-count">0</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>Byte Count:</span>
+                        <span id="byte-count">0</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>Encoding:</span>
+                        <span id="encoding-type">GSM-7 bit packed</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="decode">
+            <h2>Decode Hex to Text</h2>
+            <div class="form-group">
+                <label for="hex-input">Enter Hex:</label>
+                <textarea id="hex-input" placeholder="Enter hex string here (without spaces or separators)..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Decoding Type:</label>
+                <div class="radio-group">
+                    <input type="radio" id="gsm7-decode" name="decode-type" value="gsm7" checked>
+                    <label for="gsm7-decode">GSM-7 (Latin/English)</label>
+                    
+                    <input type="radio" id="utf16-decode" name="decode-type" value="utf16">
+                    <label for="utf16-decode">UTF-16 (Unicode/Hindi)</label>
+                </div>
+            </div>
+            
+            <button id="decode-btn" class="action-btn">Decode</button>
+            
+            <div class="result-group">
+                <div class="result">
+                    <h3>Result:</h3>
+                    <textarea id="text-output" readonly placeholder="Decoded text will appear here..."></textarea>
+                    <button id="copy-text" class="copy-btn">Copy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>SMS Encoding Tool - For SMS industry use with GSM-7 bit packed and UTF-16 encoding</p>
+    </footer>
+
+    <!-- Load the JavaScript files -->
+    <script src="gsm7.js"></script>
+    <script src="utf16.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
