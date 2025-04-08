@@ -138,6 +138,9 @@ const FormsUI = (() => {
     // Update segment info visualization
     updateSegmentInfoDisplay(text, encodingType);
     
+    // Clear previous error messages
+    clearErrorMessages();
+    
     // Highlight non-GSM7 characters if GSM-7 encoding is selected
     if (encodingType === CONFIG.ENCODING.GSM7 && !analysis.canUseGsm7) {
       // Get non-GSM7 characters
@@ -145,18 +148,35 @@ const FormsUI = (() => {
       
       // Show warning if there are non-GSM7 characters
       if (nonGsm7Chars.length > 0) {
-        const charsList = nonGsm7Chars.map(c => `"${c.char}" (position ${c.position + 1})`).join(', ');
-        const warningMsg = `Text contains ${nonGsm7Chars.length} character(s) not supported by GSM-7: ${charsList}`;
+        const errorsList = nonGsm7Chars.map(c => `"${c.char}" (position ${c.position + 1})`).join(', ');
+        const warningMsg = `Text contains ${nonGsm7Chars.length} character(s) not supported by GSM-7: ${errorsList}`;
         
         Utils.log(warningMsg, CONFIG.DEBUG.LOG_LEVELS.WARN);
         
-        // Add subtle visual indicator
-        elements.textInput.classList.add('has-invalid-chars');
+        // Add visual error indicators
+        elements.textInput.classList.add('input-error');
+        
+        // Add an error message below the textarea
+        addErrorMessage(elements.textInput, `This text contains characters not supported by GSM-7. Consider using UTF-16 encoding instead.`);
+        
+        // Add validation icon
+        addValidationIcon(elements.textInput, false);
       } else {
-        elements.textInput.classList.remove('has-invalid-chars');
+        elements.textInput.classList.remove('input-error');
+        
+        // Add validation icon for valid text
+        addValidationIcon(elements.textInput, true);
       }
     } else {
-      elements.textInput.classList.remove('has-invalid-chars');
+      elements.textInput.classList.remove('input-error');
+      
+      // Add validation icon for valid text (if there's text)
+      if (text.length > 0) {
+        addValidationIcon(elements.textInput, true);
+      } else {
+        // Remove validation icon if no text
+        removeValidationIcon(elements.textInput);
+      }
     }
   }
   
@@ -268,8 +288,12 @@ const FormsUI = (() => {
     const text = elements.textInput.value;
     const encodingType = getSelectedEncodingType('encode');
     
+    // Clear previous errors
+    clearErrorMessages();
+    
     if (!text) {
-      Utils.showNotification('Please enter text to encode', 'error');
+      elements.textInput.classList.add('input-error');
+      addErrorMessage(elements.textInput, 'Please enter text to encode');
       return;
     }
     
@@ -279,10 +303,16 @@ const FormsUI = (() => {
       
       if (elements.hexOutput) {
         elements.hexOutput.value = result.hexString;
+        elements.hexOutput.classList.remove('input-error');
       }
       
       Utils.showNotification(CONFIG.NOTIFICATIONS.ENCODE_SUCCESS, 'success');
     } catch (error) {
+      if (elements.hexOutput) {
+        elements.hexOutput.classList.add('input-error');
+      }
+      elements.textInput.classList.add('input-error');
+      addErrorMessage(elements.textInput, error.message);
       Utils.showNotification(CONFIG.NOTIFICATIONS.ENCODE_ERROR + error.message, 'error');
     }
   }
@@ -294,15 +324,20 @@ const FormsUI = (() => {
     const hexString = elements.hexInput ? elements.hexInput.value.trim() : '';
     const decodingType = getSelectedEncodingType('decode');
     
+    // Clear previous errors
+    clearErrorMessages();
+    
     // Basic validation
     if (!hexString) {
-      Utils.showNotification('Please enter a hex string to decode', 'error');
+      elements.hexInput.classList.add('input-error');
+      addErrorMessage(elements.hexInput, 'Please enter a hex string to decode');
       return;
     }
     
     // Check if input contains only hex characters
     if (!Utils.isValidHex(hexString)) {
-      Utils.showNotification('Input contains non-hexadecimal characters', 'error');
+      elements.hexInput.classList.add('input-error');
+      addErrorMessage(elements.hexInput, 'Input contains non-hexadecimal characters');
       return;
     }
     
@@ -312,11 +347,87 @@ const FormsUI = (() => {
       
       if (elements.textOutput) {
         elements.textOutput.value = result.text;
+        elements.textOutput.classList.remove('input-error');
       }
       
       Utils.showNotification(CONFIG.NOTIFICATIONS.DECODE_SUCCESS, 'success');
     } catch (error) {
+      if (elements.textOutput) {
+        elements.textOutput.classList.add('input-error');
+      }
+      elements.hexInput.classList.add('input-error');
+      addErrorMessage(elements.hexInput, error.message);
       Utils.showNotification(CONFIG.NOTIFICATIONS.DECODE_ERROR + error.message, 'error');
+    }
+  }
+
+    /**
+   * Add an error message below an input element
+   * @param {HTMLElement} inputElement - The input element
+   * @param {string} message - Error message to display
+   */
+  function addErrorMessage(inputElement, message) {
+    // Check if an error message already exists
+    let errorElement = inputElement.parentNode.querySelector('.error-message');
+    
+    if (!errorElement) {
+      // Create error message element
+      errorElement = document.createElement('div');
+      errorElement.className = 'error-message';
+      
+      // Insert after the input element
+      inputElement.parentNode.insertBefore(errorElement, inputElement.nextSibling);
+    }
+    
+    // Set message and show
+    errorElement.textContent = message;
+    errorElement.classList.add('visible');
+  }
+
+  /**
+   * Clear all error messages in the form
+   */
+  function clearErrorMessages() {
+    const errorMessages = document.querySelectorAll('.error-message');
+    errorMessages.forEach(element => {
+      element.classList.remove('visible');
+    });
+    
+    // Remove any validation icons
+    document.querySelectorAll('.validation-icon').forEach(icon => {
+      icon.remove();
+    });
+  }
+
+  /**
+   * Add a validation icon to an input
+   * @param {HTMLElement} inputElement - The input element
+   * @param {boolean} isValid - Whether the input is valid
+   */
+  function addValidationIcon(inputElement, isValid) {
+    // Remove any existing validation icon
+    removeValidationIcon(inputElement);
+    
+    // Create icon element
+    const iconElement = document.createElement('span');
+    iconElement.className = `validation-icon ${isValid ? 'valid' : 'invalid'}`;
+    iconElement.innerHTML = isValid ? '✓' : '✗';
+    
+    // Get the parent container (form-group)
+    const container = inputElement.parentNode;
+    container.appendChild(iconElement);
+  }
+
+  /**
+   * Remove validation icon from an input
+   * @param {HTMLElement} inputElement - The input element
+   */
+  function removeValidationIcon(inputElement) {
+    const container = inputElement.parentNode;
+    const existingIcon = container.querySelector('.validation-icon');
+    
+    if (existingIcon) {
+      existingIcon.remove();
     }
   }
   
@@ -326,7 +437,10 @@ const FormsUI = (() => {
     updateTextStats,
     getSelectedEncodingType,
     handleEncode,
-    handleDecode
+    handleDecode,
+    addErrorMessage,
+    clearErrorMessages
+  
   };
 })();
 

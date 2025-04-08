@@ -364,3 +364,151 @@ footer {
         font-size: 14px;
     }
 }
+
+@media (max-width: 768px) {
+    .radio-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .details {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .container {
+        padding: 20px 15px;
+        margin: 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+    
+    .tab-btn {
+        padding: 10px 15px;
+        font-size: 14px;
+        flex-grow: 1;
+        text-align: center;
+    }
+    
+    .tabs {
+        gap: 5px;
+        justify-content: center;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .action-btn {
+        width: 100%;
+        padding: 14px;
+    }
+    
+    .copy-btn {
+        top: 10px;
+        padding: 3px 8px;
+        font-size: 12px;
+    }
+    
+    .result h3 {
+        margin-right: 60px;
+    }
+    
+    textarea {
+        font-size: 16px; /* Better size for mobile input */
+    }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+    body {
+        padding: 0;
+    }
+    
+    .container {
+        border-radius: 0;
+    }
+    
+    h1 {
+        font-size: 1.5rem;
+    }
+    
+    h2 {
+        font-size: 1.2rem;
+    }
+    
+    .example-buttons {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .example-btn {
+        text-align: center;
+    }
+}
+
+/* Enhanced error visualization */
+.input-error {
+    border-color: #e74c3c !important;
+    box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.15) !important;
+  }
+  
+  .char-error {
+    position: relative;
+    background-color: rgba(231, 76, 60, 0.2);
+    border-bottom: 2px solid #e74c3c;
+  }
+  
+  .error-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #e74c3c;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+  }
+  
+  .char-error:hover .error-tooltip {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .error-message {
+    color: #e74c3c;
+    font-size: 14px;
+    margin-top: 5px;
+    display: none;
+  }
+  
+  .error-message.visible {
+    display: block;
+  }
+  
+  .validation-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+  }
+  
+  .validation-icon.valid {
+    color: #2ecc71;
+  }
+  
+  .validation-icon.invalid {
+    color: #e74c3c;
+  }
+  
+  .form-group {
+    position: relative;
+  }
